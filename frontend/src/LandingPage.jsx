@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { Button } from "./components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "./components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./components/ui/accordion";
@@ -6,6 +7,9 @@ import { Input } from "./components/ui/input";
 import { Badge } from "./components/ui/badge";
 import { Check, Truck, TrendingUp, Users, Download, Lock, Smartphone, Star, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8001";
+const API = `${BACKEND_URL}/api`;
 
 const LandingPage = () => {
   const [email, setEmail] = useState("");
@@ -18,23 +22,44 @@ const LandingPage = () => {
     logistics: "https://images.unsplash.com/photo-1616757957712-6c8874a8c82b"
   };
 
-  const handleLeadSubmit = (e) => {
+  const handleLeadSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulation
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      await axios.post(`${API}/leads`, { email });
+      toast.success("Success! The checklist has been sent to your email.");
       setEmail("");
-      toast.success("Success! Check your email for the checklist.");
-    }, 1500);
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const handlePurchase = (tier) => {
-    toast.info(`Starting secure payment for ${tier}... (Mock)`);
-    // Simulation of payment flow
-    setTimeout(() => {
-        toast.success("Payment Successful! Downloading your Launchpad...");
-    }, 2000);
+  const handlePurchase = async (tier) => {
+    const amountMap = {
+        'Starter': 50,
+        'Standard VIP': 150,
+        'Premium VVIP': 500
+    };
+    
+    toast.info(`Starting secure payment for ${tier}...`);
+    
+    try {
+        // Create mock order
+        await axios.post(`${API}/orders`, { 
+            tier, 
+            amount: amountMap[tier] || 0 
+        });
+        
+        // Simulate payment delay
+        setTimeout(() => {
+            toast.success("Payment Successful! Downloading your Launchpad...");
+        }, 1500);
+    } catch (error) {
+        toast.error("Could not process order. Please try again.");
+    }
   };
 
   return (
