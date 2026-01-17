@@ -5,7 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./components/ui/accordion";
 import { Input } from "./components/ui/input";
 import { Badge } from "./components/ui/badge";
-import { Check, Truck, TrendingUp, Users, Download, Lock, Smartphone, Star, ArrowRight } from "lucide-react";
+import { Check, Truck, TrendingUp, Users, Download, Lock, Smartphone, Star, ArrowRight, Map, Navigation, Radar, ShieldCheck, Zap } from "lucide-react";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./components/ui/carousel";
 import { toast } from "sonner";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8001";
@@ -14,6 +15,18 @@ const API = `${BACKEND_URL}/api`;
 const LandingPage = () => {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [api, setApi] = React.useState(null);
+
+  // Auto-swipe for testimonials
+  React.useEffect(() => {
+    if (!api) return;
+
+    const intervalId = setInterval(() => {
+      api.scrollNext();
+    }, 4000); // Swipe every 4 seconds
+
+    return () => clearInterval(intervalId);
+  }, [api]);
 
   // Images from Vision Expert
   const IMAGES = {
@@ -159,39 +172,205 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* The Analogy - GPS */}
-      <section className="py-20 px-4 bg-[var(--text-primary)] text-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none">
-             <img src={IMAGES.logistics} className="w-full h-full object-cover mix-blend-overlay" alt="Delivery background"/>
+      {/* The Analogy - GPS Redesign */}
+      <section className="py-24 px-4 bg-[var(--text-primary)] text-white relative overflow-hidden">
+        {/* Background Decorative Elements */}
+        <div className="absolute inset-0 opacity-5 pointer-events-none">
+            <div className="absolute top-0 left-0 w-full h-full" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
         </div>
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center relative z-10">
-            <div>
-                <Badge className="bg-[var(--accent-primary)] text-[var(--text-primary)] hover:bg-[var(--accent-strong)] mb-6 border-none">The Philosophy</Badge>
-                <h2 className="heading-2 text-white mb-6">Not just a Map. <br/> It's a GPS.</h2>
-                <p className="body-large text-gray-300 mb-6">
-                    Think of BUG Social Media Agency not as a library giving you books (information), but as a <strong>GPS system for a delivery driver</strong>.
-                </p>
-                <p className="body-medium text-gray-400">
-                    A library gives you a map and wishes you luck. The Launchpad tells you exactly which turns to take, how to avoid traffic (logistics issues), and ensures you reach your destination (a sale) as efficiently as possible.
-                </p>
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-[var(--accent-primary)] rounded-full blur-[120px] opacity-10"></div>
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-[var(--accent-strong)] rounded-full blur-[120px] opacity-10"></div>
+
+        <div className="max-w-6xl mx-auto relative z-10">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <Badge className="bg-white/10 text-[var(--accent-primary)] border-white/20 mb-6 backdrop-blur-sm px-4 py-1.5">
+                        <Radar className="w-3 h-3 mr-2 animate-pulse" />
+                        Strategic Framework
+                    </Badge>
+                    <h2 className="text-4xl md:text-6xl font-bold leading-tight mb-8">
+                        Stop following maps. <br/>
+                        <span className="text-[var(--accent-primary)]">Start using GPS.</span>
+                    </h2>
+                    <p className="text-xl text-gray-300 mb-8 leading-relaxed max-w-xl">
+                        A map tells you where the destination is and leaves you to figure out the traffic. 
+                        <strong> BUG Agency is your GPS.</strong> We provide real-time redirection, avoid the "Ghosting" traffic jams, and calculate the fastest route to your next GH¢ 10,000.
+                    </p>
+                    
+                    <div className="grid sm:grid-cols-2 gap-6 mt-12">
+                        <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/5 border border-white/10">
+                            <div className="bg-[var(--accent-wash)] p-3 rounded-xl">
+                                <Navigation className="w-6 h-6 text-[var(--accent-primary)]" />
+                            </div>
+                            <div>
+                                <h4 className="font-bold mb-1">Live Guidance</h4>
+                                <p className="text-sm text-gray-400">Step-by-step scripts for every customer inquiry.</p>
+                            </div>
+                        </div>
+                        <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/5 border border-white/10">
+                            <div className="bg-orange-500/10 p-3 rounded-xl">
+                                <ShieldCheck className="w-6 h-6 text-orange-400" />
+                            </div>
+                            <div>
+                                <h4 className="font-bold mb-1">Traffic Bypass</h4>
+                                <p className="text-sm text-gray-400">Proven MoMo protocols to avoid payment delays.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="relative">
+                    {/* Catchy Visual Dashboard Card */}
+                    <div className="bg-[#1a1b1e] rounded-[2rem] border border-white/10 shadow-2xl p-8 relative overflow-hidden group">
+                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[var(--accent-primary)] to-transparent"></div>
+                        
+                        <div className="flex justify-between items-center mb-10">
+                            <div className="flex gap-2">
+                                <div className="w-3 h-3 rounded-full bg-red-500/50"></div>
+                                <div className="w-3 h-3 rounded-full bg-yellow-500/50"></div>
+                                <div className="w-3 h-3 rounded-full bg-green-500/50"></div>
+                            </div>
+                            <div className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">System Status: Active</div>
+                        </div>
+
+                        <div className="space-y-8">
+                            {/* Comparison Row 1 */}
+                            <div className="relative">
+                                <div className="flex justify-between text-xs mb-3">
+                                    <span className="text-gray-500 uppercase">Old Strategy</span>
+                                    <span className="text-red-400">Error 404</span>
+                                </div>
+                                <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                                    <div className="h-full w-1/3 bg-red-500/40"></div>
+                                </div>
+                                <p className="text-[11px] text-gray-400 mt-2">"Hoping for viral luck" — Unpredictable results.</p>
+                            </div>
+
+                            {/* Comparison Row 2 */}
+                            <div className="relative">
+                                <div className="flex justify-between text-xs mb-3">
+                                    <span className="text-[var(--accent-primary)] uppercase font-bold">The Launchpad</span>
+                                    <span className="text-[var(--accent-primary)]">Optimized</span>
+                                </div>
+                                <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                                    <div className="h-full w-[92%] bg-[var(--accent-primary)] shadow-[0_0_15px_rgba(143,236,120,0.5)] transition-all duration-1000 group-hover:w-[98%]"></div>
+                                </div>
+                                <div className="flex gap-4 mt-3">
+                                    <div className="flex items-center gap-2 text-[10px] text-gray-300">
+                                        <Zap className="w-3 h-3 text-[var(--accent-primary)]" /> 5-Post Rule
+                                    </div>
+                                    <div className="flex items-center gap-2 text-[10px] text-gray-300">
+                                        <Zap className="w-3 h-3 text-[var(--accent-primary)]" /> Ghost-Proof
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Floating Navigation UI Element */}
+                        <div className="mt-12 p-6 rounded-2xl bg-[var(--accent-primary)] text-[var(--text-primary)] relative transform group-hover:scale-[1.02] transition-transform duration-500">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <div className="text-[10px] uppercase font-bold opacity-60">Route Recommendation</div>
+                                    <div className="text-lg font-bold">Next Sale: 12 mins</div>
+                                </div>
+                                <div className="w-12 h-12 bg-black/10 rounded-full flex items-center justify-center">
+                                    <Navigation className="w-6 h-6 rotate-45" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Decorative Blur behind the card */}
+                    <div className="absolute -z-10 inset-0 translate-x-4 translate-y-4 bg-black/40 rounded-[2rem] blur-xl"></div>
+                </div>
             </div>
-            <div className="bg-white/10 backdrop-blur-md p-8 rounded-3xl border border-white/10">
-                <div className="space-y-6">
-                    <div className="flex gap-4 items-start">
-                        <div className="w-8 h-8 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center shrink-0">✕</div>
-                        <div>
-                            <h4 className="font-bold text-white">The Old Way</h4>
-                            <p className="text-sm text-gray-400">Random posting, hoping for viral luck, disorganized rider list.</p>
-                        </div>
+        </div>
+      </section>
+
+      {/* Results Section - Bento Redesign */}
+      <section className="py-24 px-4 bg-white">
+        <div className="max-w-6xl mx-auto">
+            <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+                <div className="max-w-2xl">
+                    <Badge className="bg-[var(--accent-wash)] text-[var(--accent-text)] border-[var(--accent-strong)] mb-4 px-4 py-1.5">
+                        Performance Metrics
+                    </Badge>
+                    <h2 className="text-4xl md:text-5xl font-bold text-[var(--text-primary)] leading-tight">
+                        We don't sell hope. <br/>
+                        <span className="text-[var(--text-secondary)]">We deliver revenue.</span>
+                    </h2>
+                </div>
+                <div className="bg-[var(--bg-section)] p-4 rounded-2xl border border-[var(--border-light)] flex items-center gap-4">
+                    <div className="flex -space-x-3">
+                        {[1, 2, 3, 4].map(i => (
+                            <img key={i} src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i+10}`} className="w-10 h-10 rounded-full border-2 border-white bg-gray-100" alt="client" />
+                        ))}
                     </div>
-                    <div className="w-px h-8 bg-white/20 ml-4 my-2"></div>
-                    <div className="flex gap-4 items-start">
-                         <div className="w-8 h-8 rounded-full bg-[var(--accent-primary)] text-[var(--text-primary)] flex items-center justify-center shrink-0">✓</div>
-                        <div>
-                            <h4 className="font-bold text-[var(--accent-primary)]">The Launchpad Way</h4>
-                            <p className="text-sm text-gray-300">Strategic 5-post rule, Verified MoMo protocols, "Ghost-Proof" scripts.</p>
-                        </div>
+                    <div className="text-sm">
+                        <div className="font-bold text-[var(--text-primary)]">500+ Businesses</div>
+                        <div className="text-[var(--text-secondary)] text-xs">Verified Growth</div>
                     </div>
+                </div>
+            </div>
+
+            <div className="grid md:grid-cols-12 gap-6">
+                {/* Main Metric - Large Bento Card */}
+                <div className="md:col-span-8 p-8 md:p-12 rounded-[2.5rem] bg-[var(--text-primary)] text-white relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <TrendingUp size={120} />
+                    </div>
+                    <div className="relative z-10">
+                        <div className="text-[var(--accent-primary)] font-mono text-sm uppercase tracking-widest mb-6">Growth Multiplier</div>
+                        <div className="text-6xl md:text-8xl font-bold mb-6 tracking-tighter">340%</div>
+                        <h4 className="text-2xl font-bold mb-4">Average Revenue Lift</h4>
+                        <p className="text-gray-400 max-w-md text-lg leading-relaxed">
+                            Our clients see an average 3.4x increase in monthly revenue within 90 days of implementing the full BUG blueprint.
+                        </p>
+                    </div>
+                    <div className="mt-12 flex gap-4 overflow-hidden grayscale opacity-30">
+                        {/* Mock Logos for local flair */}
+                        {['GhanaFood', 'AccraTech', 'KumasiStyles', 'SME-GH'].map(logo => (
+                            <div key={logo} className="px-4 py-2 border border-white/20 rounded-lg text-xs font-bold whitespace-nowrap">{logo}</div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Secondary Metric - Vertical Bento Card */}
+                <div className="md:col-span-4 p-8 rounded-[2.5rem] bg-[var(--accent-primary)] text-[var(--text-primary)] flex flex-col justify-between group">
+                    <div>
+                        <div className="w-12 h-12 bg-black/5 rounded-2xl flex items-center justify-center mb-8">
+                            <Zap className="w-6 h-6" />
+                        </div>
+                        <div className="text-5xl font-bold mb-2">12.5x</div>
+                        <h4 className="font-bold text-xl uppercase tracking-tight">Conversion Jump</h4>
+                    </div>
+                    <p className="mt-8 text-sm font-medium opacity-80 leading-relaxed">
+                        Moving from random status updates to our "5-Post Rule" leads to a massive leap in payment completions.
+                    </p>
+                </div>
+
+                {/* Third Metric - Small Bento Card */}
+                <div className="md:col-span-4 p-8 rounded-[2.5rem] border border-[var(--border-light)] bg-[var(--bg-section)] hover:bg-white transition-colors group">
+                    <div className="flex items-center gap-4 mb-6">
+                        <div className="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center">
+                            <Users className="w-5 h-5 text-[var(--accent-text)]" />
+                        </div>
+                        <span className="font-bold text-[var(--text-primary)]">Reach</span>
+                    </div>
+                    <div className="text-4xl font-bold text-[var(--text-primary)] mb-2">50k+</div>
+                    <p className="text-sm text-[var(--text-secondary)]">Monthly organic impressions for even the smallest boutiques.</p>
+                </div>
+
+                {/* Fourth Metric - Call to Action Bento Card */}
+                <div className="md:col-span-8 p-8 rounded-[2.5rem] bg-[var(--accent-wash)] border border-[var(--accent-strong)] flex flex-col md:flex-row items-center justify-between gap-8 group">
+                    <div className="flex-1">
+                        <h4 className="text-2xl font-bold text-[var(--text-primary)] mb-2">Ready to be our next success story?</h4>
+                        <p className="text-[var(--text-secondary)] text-sm">Join 500+ businesses scaling the right way.</p>
+                    </div>
+                    <Button onClick={() => document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' })} className="rounded-full bg-[var(--text-primary)] px-8 h-14 group-hover:scale-105 transition-transform">
+                        Get Your Blueprint
+                        <ArrowRight className="ml-2 w-5 h-5" />
+                    </Button>
                 </div>
             </div>
         </div>
@@ -223,6 +402,69 @@ const LandingPage = () => {
                     </AccordionItem>
                 ))}
             </Accordion>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-24 px-4 bg-white overflow-hidden">
+        <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+                <h2 className="heading-2 mb-4">What Our Clients Say</h2>
+                <p className="body-medium text-[var(--text-secondary)]">Trusted by entrepreneurs across Accra, Kumasi, and beyond.</p>
+            </div>
+
+            <Carousel
+                setApi={setApi}
+                opts={{
+                    align: "start",
+                    loop: true,
+                }}
+                className="w-full relative"
+            >
+                <CarouselContent>
+                    {[
+                        { name: "Akosua Mensah", role: "CEO, Akosua's Boutique", text: "Before BUG, I was getting 100 status views but zero sales. After implementing the 5-post rule, I sold out my entire new stock in 48 hours. The logistics module alone is worth the price!", rating: 5 },
+                        { name: "Kwame Boateng", role: "Founder, KB Electronics", text: "The 'Ghost-Proof' scripts changed everything. I used to lose customers when I mentioned the price. Now, I have a clear path to closing sales. Highly recommended for any GH business.", rating: 5 },
+                        { name: "Serwaa Appiah", role: "Owner, Serwaa's Skin Care", text: "I finally feel like a professional. My brand colors are consistent, and my riders are actually showing up on time thanks to the verified list. BUG is a lifesaver.", rating: 5 },
+                        { name: "Yaw Frimpong", role: "Founder, YF Footwear", text: "I used to struggle with pricing transparency. Now my catalog does the talking. Revenue is up by 40% since joining the BUG community.", rating: 5 },
+                        { name: "Efua Asantewaa", role: "Creative Director, Efua's Fabrics", text: "The '5-Post Rule' is magic. I don't feel like I'm spamming my contacts anymore, and the engagement is real and consistent.", rating: 5 },
+                        { name: "Kojo Addo", role: "CEO, Gadget Hub GH", text: "The logistics mastery module saved my business reputation. Verified riders make all the difference in Accra traffic. No more disappointed customers.", rating: 5 },
+                        { name: "Ama Konadu", role: "Owner, Ama's Kitchen", text: "Transitioning to WhatsApp Business was scary but the BUG blueprint made it so simple. My daily orders have doubled in just two months!", rating: 5 },
+                        { name: "Derrick Tetteh", role: "Manager, DT Mobile", text: "Ghosting was my biggest problem. The 'Ghost-Proof' scripts actually work. 80% of my 'How much' inquiries now end in successful payments.", rating: 5 },
+                        { name: "Naa Shika", role: "Founder, Shika's Jewelry", text: "I love the Canva ad templates. My statuses look so professional now, and I'm getting customers from Kumasi and Takoradi too!", rating: 5 },
+                        { name: "Prince Osei", role: "Owner, P.O. Groceries", text: "The 7-Day Growth Challenge gave me the kickstart I needed. BUG is the real deal for GH SMEs looking to scale without ads.", rating: 5 },
+                        { name: "Abena Boateng", role: "CEO, Abena's Accessories", text: "I used to post randomly and hope for the best. Now I have a strategy. My followers are actually buying, not just liking my posts.", rating: 5 },
+                        { name: "Ekow Blankson", role: "Founder, Ekow's Electronics", text: "The supply chain tips in the Standard tier are gold. I've found better suppliers and significantly reduced my operational costs.", rating: 5 },
+                        { name: "Zainab Issah", role: "Owner, Zee's Modest Wear", text: "The community support in the Premium tier is amazing. It's so good to be around other GH entrepreneurs who truly get the struggle.", rating: 5 }
+                    ].map((testimonial, i) => (
+                        <CarouselItem key={i} className="md:basis-1/2 lg:basis-1/3">
+                            <Card className="h-full border border-[var(--border-light)] hover:shadow-lg transition-shadow bg-[var(--bg-section)] mx-1">
+                                <CardHeader>
+                                    <div className="flex gap-1 mb-4">
+                                        {[...Array(testimonial.rating)].map((_, i) => (
+                                            <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                                        ))}
+                                    </div>
+                                    <p className="text-[var(--text-primary)] italic mb-6">"{testimonial.text}"</p>
+                                </CardHeader>
+                                <CardFooter className="flex items-center gap-4 border-t border-[var(--border-light)] pt-6">
+                                    <div className="w-10 h-10 rounded-full bg-[var(--accent-primary)] flex items-center justify-center text-[var(--text-primary)] font-bold">
+                                        {testimonial.name.charAt(0)}
+                                    </div>
+                                    <div>
+                                        <div className="font-bold text-[var(--text-primary)] text-sm">{testimonial.name}</div>
+                                        <div className="text-xs text-[var(--text-secondary)]">{testimonial.role}</div>
+                                    </div>
+                                </CardFooter>
+                            </Card>
+                        </CarouselItem>
+                    ))}
+                </CarouselContent>
+                <div className="flex justify-center gap-4 mt-8">
+                    <CarouselPrevious className="static translate-y-0" />
+                    <CarouselNext className="static translate-y-0" />
+                </div>
+            </Carousel>
         </div>
       </section>
 
@@ -307,8 +549,12 @@ const LandingPage = () => {
                         </ul>
                     </CardContent>
                     <CardFooter>
-                        <Button variant="outline" className="w-full rounded-full" onClick={() => handlePurchase('Premium VVIP')}>
-                            Select Premium
+                        <Button 
+                            variant="outline" 
+                            className="w-full rounded-full border-[var(--text-primary)] hover:bg-[var(--text-primary)] hover:text-white"
+                            onClick={() => window.open('https://wa.me/233000000000?text=I%20am%20interested%20in%20the%20Premium%20VVIP%20tier', '_blank')}
+                        >
+                            Talk to an Expert
                         </Button>
                     </CardFooter>
                 </div>
@@ -343,26 +589,116 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* FAQ Section */}
+      <section className="py-24 px-4 bg-[var(--bg-page)] border-t border-[var(--border-light)]">
+        <div className="max-w-3xl mx-auto">
+            <div className="text-center mb-16">
+                <h2 className="heading-2 mb-4">Frequently Asked Questions</h2>
+                <p className="body-medium text-[var(--text-secondary)]">Everything you need to know about the BUG Launchpad.</p>
+            </div>
+
+            <Accordion type="single" collapsible className="w-full space-y-4">
+                {[
+                    { q: "How soon will I see results?", a: "Many of our clients see an increase in inquiries within the first 7 days of applying the '5-Post Rule' and optimizing their WhatsApp Business profile." },
+                    { q: "Is this for new or existing businesses?", a: "Both! If you're just starting, it saves you months of trial and error. If you're already selling, it helps you scale and professionalize your operations." },
+                    { q: "Do I need to pay for ads?", a: "No. The Launchpad focuses on organic growth and maximizing the tools you already have (WhatsApp, Instagram, TikTok) without spending a pesewa on ads." },
+                    { q: "What happens after I purchase?", a: "You'll receive an instant download link for the PDF guide and templates. If you chose the Standard or Premium tiers, our team will reach out within 24 hours to set up your bonuses." },
+                    { q: "Is there support if I get stuck?", a: "Yes! Premium members get access to our private community and 1-on-1 strategy audits. We're here to ensure you succeed." }
+                ].map((faq, i) => (
+                    <AccordionItem key={i} value={`faq-${i}`} className="border border-[var(--border-light)] rounded-xl px-4 bg-white shadow-sm transition-all">
+                        <AccordionTrigger className="hover:no-underline py-5 text-left font-semibold text-[var(--text-primary)]">
+                            {faq.q}
+                        </AccordionTrigger>
+                        <AccordionContent className="text-[var(--text-secondary)] pb-6 text-base leading-relaxed">
+                            {faq.a}
+                        </AccordionContent>
+                    </AccordionItem>
+                ))}
+            </Accordion>
+        </div>
+      </section>
+
+      {/* About Section - Meet the Agency */}
+      <section className="py-24 px-4 bg-white" id="about">
+        <div className="max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-16 items-center">
+                <div className="relative">
+                    <div className="absolute -top-4 -left-4 w-24 h-24 bg-[var(--accent-primary)] rounded-full -z-10 opacity-50 blur-2xl"></div>
+                    <img 
+                        src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2" 
+                        alt="BUG Agency Team" 
+                        className="rounded-3xl shadow-2xl border border-[var(--border-light)]"
+                    />
+                    <div className="absolute -bottom-6 -right-6 bg-white p-6 rounded-2xl shadow-xl border border-[var(--border-light)] max-w-[200px]">
+                        <p className="text-sm font-bold text-[var(--text-primary)]">"Our mission is to empower 10,000 Ghanaian businesses by 2030."</p>
+                    </div>
+                </div>
+                <div>
+                    <Badge variant="outline" className="mb-6 border-[var(--accent-strong)] text-[var(--accent-strong)]">Our Story</Badge>
+                    <h2 className="heading-2 mb-6">Built by Entrepreneurs, For Entrepreneurs</h2>
+                    <p className="body-large text-[var(--text-secondary)] mb-6">
+                        BUG Social Media Agency started with a simple observation: Ghanaian business owners are incredibly hardworking, but many are struggling to translate that hard work into online sales.
+                    </p>
+                    <p className="body-medium text-[var(--text-secondary)] mb-8">
+                        We spent 3 years testing strategies in the local market—figuring out exactly what makes a customer in Accra click "Pay" and why they ghost in the middle of a chat. The result is **The Launchpad**: a proven system tailored for the unique challenges of the Ghanaian digital landscape.
+                    </p>
+                    <div className="flex gap-4">
+                        <Button className="rounded-full bg-[var(--text-primary)] px-8">Read Our Full Story</Button>
+                        <Button variant="outline" className="rounded-full px-8">Our Team</Button>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </section>
+
       {/* Footer */}
-      <footer className="bg-[var(--text-primary)] text-white py-12 px-4">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-            <div className="text-center md:text-left">
-                <div className="flex items-center gap-2 font-bold text-xl mb-4 justify-center md:justify-start">
-                    <div className="w-8 h-8 bg-[var(--accent-primary)] rounded-full flex items-center justify-center text-[var(--text-primary)]">
-                        <TrendingUp size={18} />
+      <footer className="bg-[var(--text-primary)] text-white py-16 px-4">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-12 mb-12">
+            <div className="col-span-1 md:col-span-2">
+                <div className="flex items-center gap-2 font-bold text-2xl mb-6">
+                    <div className="w-10 h-10 bg-[var(--accent-primary)] rounded-full flex items-center justify-center text-[var(--text-primary)]">
+                        <TrendingUp size={22} />
                     </div>
                     BUG Agency
                 </div>
-                <p className="text-gray-400 text-sm">Helping Ghanaian businesses scale from likes to sales.</p>
+                <p className="text-gray-400 max-w-sm mb-6">
+                    Helping Ghanaian businesses transition from "Ghosted" inquiries to consistent revenue using strategic social media blueprints.
+                </p>
+                <div className="flex gap-4">
+                    {['Instagram', 'Twitter', 'LinkedIn', 'Facebook'].map((social) => (
+                        <a key={social} href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[var(--accent-primary)] hover:text-[var(--text-primary)] transition-all">
+                            <span className="sr-only">{social}</span>
+                            <div className="w-5 h-5 bg-gray-400 rounded-sm"></div> {/* Placeholder icon */}
+                        </a>
+                    ))}
+                </div>
             </div>
-            <div className="flex gap-6 text-sm text-gray-400">
-                <a href="#" className="hover:text-[var(--accent-primary)] transition-colors">Terms</a>
-                <a href="#" className="hover:text-[var(--accent-primary)] transition-colors">Privacy</a>
-                <a href="#" className="hover:text-[var(--accent-primary)] transition-colors">Contact</a>
+            <div>
+                <h4 className="font-bold mb-6 text-white uppercase tracking-wider text-sm">Quick Links</h4>
+                <ul className="space-y-4 text-gray-400 text-sm">
+                    <li><a href="#features" className="hover:text-white transition-colors">The Launchpad</a></li>
+                    <li><a href="#pricing" className="hover:text-white transition-colors">Pricing Tiers</a></li>
+                    <li><a href="#about" className="hover:text-white transition-colors">Our Story</a></li>
+                    <li><a href="#" className="hover:text-white transition-colors">Success Stories</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 className="font-bold mb-6 text-white uppercase tracking-wider text-sm">Contact Us</h4>
+                <ul className="space-y-4 text-gray-400 text-sm">
+                    <li>Accra, Ghana</li>
+                    <li>hello@bugagency.gh</li>
+                    <li>+233 (0) 50 000 0000</li>
+                    <li className="pt-4 font-bold text-white">Mon - Fri: 9am - 6pm</li>
+                </ul>
             </div>
         </div>
-        <div className="max-w-6xl mx-auto mt-8 pt-8 border-t border-white/10 text-center text-xs text-gray-500">
-            © 2025 BUG Social Media Agency. All rights reserved.
+        <div className="max-w-6xl mx-auto pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
+            <p>© 2025 BUG Social Media Agency. All rights reserved.</p>
+            <div className="flex gap-6">
+                <a href="#" className="hover:text-white">Privacy Policy</a>
+                <a href="#" className="hover:text-white">Terms of Service</a>
+                <a href="#" className="hover:text-white">Refund Policy</a>
+            </div>
         </div>
       </footer>
     </div>
