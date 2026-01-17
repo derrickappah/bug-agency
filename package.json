@@ -1,0 +1,12 @@
+{
+  "name": "bug-agency",
+  "version": "1.0.0",
+  "description": "BUG Social Media Agency Landing Page",
+  "scripts": {
+    "build": "cd frontend && npm run build",
+    "dev": "cd frontend && npm start"
+  },
+  "workspaces": [
+    "frontend"
+  ]
+}
