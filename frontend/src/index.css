@@ -9,6 +9,7 @@ body {
     "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 code {
@@ -24,10 +25,14 @@ code {
   --bg-section: rgba(0, 0, 0, 0.02);
 
   /* Text - Professional Hierarchy */
-  --text-primary: rgb(0, 55, 32);       /* #003720 */
-  --text-body: rgb(14, 15, 12);         /* #0e0f0c */
-  --text-secondary: rgb(131, 146, 140); /* #83928c */
-  --text-muted: rgb(175, 183, 180);     /* #afb7b4 */
+  --text-primary: rgb(0, 55, 32);
+  /* #003720 */
+  --text-body: rgb(14, 15, 12);
+  /* #0e0f0c */
+  --text-secondary: rgb(131, 146, 140);
+  /* #83928c */
+  --text-muted: rgb(175, 183, 180);
+  /* #afb7b4 */
 
   /* Borders */
   --border-light: rgba(0, 0, 0, 0.1);
@@ -42,13 +47,15 @@ code {
 
   /* Shadcn Overrides for Green Theme */
   --background: 0 0% 100%;
-  --foreground: 140 100% 11%; /* #003720 equivalent */
+  --foreground: 140 100% 11%;
+  /* #003720 equivalent */
   --card: 0 0% 100%;
   --card-foreground: 140 100% 11%;
   --popover: 0 0% 100%;
   --popover-foreground: 140 100% 11%;
   --primary: 140 100% 11%;
-  --primary-foreground: 108 76% 70%; /* #8FEC78 equivalentish */
+  --primary-foreground: 108 76% 70%;
+  /* #8FEC78 equivalentish */
   --secondary: 108 76% 95%;
   --secondary-foreground: 140 100% 11%;
   --muted: 108 20% 96%;
@@ -63,9 +70,9 @@ code {
   --radius: 0.5rem;
 
   /* Gradient System */
-  --gradient-hero: radial-gradient(at 53% 78%, hsla(60,100%,50%,0.3) 0px, transparent 50%), 
-                   radial-gradient(at 71% 91%, hsla(108,100%,50%,0.3) 0px, transparent 50%), 
-                   radial-gradient(at 31% 91%, hsla(30,100%,50%,0.17) 0px, transparent 50%);
+  --gradient-hero: radial-gradient(at 53% 78%, hsla(60, 100%, 50%, 0.3) 0px, transparent 50%),
+    radial-gradient(at 71% 91%, hsla(108, 100%, 50%, 0.3) 0px, transparent 50%),
+    radial-gradient(at 31% 91%, hsla(30, 100%, 50%, 0.17) 0px, transparent 50%);
   --gradient-button: linear-gradient(to bottom right, var(--accent-primary), var(--accent-strong));
 }
 
@@ -76,49 +83,54 @@ code {
 }
 
 /* TYPOGRAPHY CLASSES */
-.heading-1 { 
-  font-family: system-ui, sans-serif; 
-  font-weight: 700; 
-  font-size: clamp(2.25rem, 5vw, 4.5rem); 
-  line-height: 0.9; 
-  letter-spacing: -0.02em; 
+.heading-1 {
+  font-family: system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.25rem, 5vw, 4.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
   color: var(--text-primary);
 }
-.heading-2 { 
-  font-family: system-ui, sans-serif; 
-  font-weight: 600; 
-  font-size: clamp(1.875rem, 4vw, 3rem); 
-  line-height: 0.95; 
-  letter-spacing: -0.015em; 
+
+.heading-2 {
+  font-family: system-ui, sans-serif;
+  font-weight: 600;
+  font-size: clamp(1.875rem, 4vw, 3rem);
+  line-height: 0.95;
+  letter-spacing: -0.015em;
   color: var(--text-primary);
 }
-.heading-3 { 
-  font-family: system-ui, sans-serif; 
-  font-weight: 600; 
-  font-size: clamp(1.25rem, 3vw, 1.5rem); 
-  line-height: 1.2; 
-  letter-spacing: -0.01em; 
+
+.heading-3 {
+  font-family: system-ui, sans-serif;
+  font-weight: 600;
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
   color: var(--text-primary);
 }
-.body-large { 
-  font-family: system-ui, sans-serif; 
-  font-weight: 400; 
-  font-size: clamp(1.125rem, 2.5vw, 1.25rem); 
-  line-height: 1.6; 
-  color: var(--text-body); 
+
+.body-large {
+  font-family: system-ui, sans-serif;
+  font-weight: 400;
+  font-size: clamp(1.125rem, 2.5vw, 1.25rem);
+  line-height: 1.6;
+  color: var(--text-body);
 }
-.body-medium { 
-  font-family: system-ui, sans-serif; 
-  font-weight: 400; 
-  font-size: clamp(1rem, 2vw, 1.125rem); 
-  line-height: 1.5; 
-  color: var(--text-body); 
+
+.body-medium {
+  font-family: system-ui, sans-serif;
+  font-weight: 400;
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  line-height: 1.5;
+  color: var(--text-body);
 }
 
 /* COMPONENT CLASSES */
 .btn-primary {
   background: var(--gradient-button);
-  color: var(--text-primary); /* Dark text on bright green for contrast */
+  color: var(--text-primary);
+  /* Dark text on bright green for contrast */
   border: none;
   border-radius: 9999px;
   padding: 14px 24px;
@@ -132,6 +144,7 @@ code {
   align-items: center;
   justify-content: center;
 }
+
 .btn-primary:hover {
   transform: scale(1.02);
   box-shadow: 0px 4px 8px rgba(148, 242, 127, 0.3);
@@ -139,18 +152,20 @@ code {
 
 .product-card {
   background: var(--bg-card);
-  border: 1px solid var(--border-light);
-  border-radius: 12px;
-  padding: 24px;
-  transition: all 0.2s ease;
+  border: 2px solid var(--border-light);
+  border-radius: 1.5rem;
+  padding: 28px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
-  overflow: hidden;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
+
 .product-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-color: var(--border-medium);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+  border-color: var(--accent-primary);
 }
 
 .hero-section {
@@ -168,7 +183,35 @@ code {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Hide scrollbar on mobile devices while keeping functionality */
+@media (max-width: 768px) {
+
+  /* For Chrome, Safari and Opera */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* For IE, Edge and Firefox */
+  html,
+  body {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
