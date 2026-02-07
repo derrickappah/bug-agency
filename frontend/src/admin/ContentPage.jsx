@@ -7,7 +7,12 @@ import {
     Type,
     Image as ImageIcon,
     Layout,
-    Check
+    Check,
+    Plus,
+    Trash2,
+    GripVertical,
+    ChevronDown,
+    ChevronUp
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
 import { Button } from "../components/ui/button";
@@ -132,6 +137,7 @@ const ContentPage = () => {
                         <TabsTrigger value="blueprint" className="rounded-xl px-6 py-3 data-[state=active]:bg-[var(--accent-wash)] data-[state=active]:text-[var(--text-primary)] font-bold">Blueprint</TabsTrigger>
                         <TabsTrigger value="faq" className="rounded-xl px-6 py-3 data-[state=active]:bg-[var(--accent-wash)] data-[state=active]:text-[var(--text-primary)] font-bold">FAQ</TabsTrigger>
                         <TabsTrigger value="story" className="rounded-xl px-6 py-3 data-[state=active]:bg-[var(--accent-wash)] data-[state=active]:text-[var(--text-primary)] font-bold">Story</TabsTrigger>
+                        <TabsTrigger value="categories" className="rounded-xl px-6 py-3 data-[state=active]:bg-[var(--accent-wash)] data-[state=active]:text-[var(--text-primary)] font-bold">Business Categories</TabsTrigger>
                     </TabsList>
                 </div>
 
@@ -381,6 +387,86 @@ const ContentPage = () => {
                             <ContentField label="Paragraph 1" textarea value={localContent['story_p1']} onChange={(v) => setLocalContent({ ...localContent, story_p1: v })} />
                             <ContentField label="Paragraph 2" textarea value={localContent['story_p2']} onChange={(v) => setLocalContent({ ...localContent, story_p2: v })} />
                             <ContentField label="Quote Text" textarea value={localContent['story_quote']} onChange={(v) => setLocalContent({ ...localContent, story_quote: v })} />
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+
+                {/* Business Categories */}
+                <TabsContent value="categories" className="space-y-6">
+                    <Card className="border-[var(--border-light)] shadow-sm">
+                        <CardHeader>
+                            <CardTitle className="font-bold flex items-center justify-between">
+                                Eligible Business Categories
+                                <Button
+                                    onClick={() => addItem('business_categories_items', { title: 'New Category', items: ['New Item'] })}
+                                    className="bg-[var(--accent-primary)] text-[var(--text-primary)] hover:bg-[var(--accent-strong)] font-bold rounded-xl"
+                                >
+                                    <Plus size={18} className="mr-2" /> Add Category
+                                </Button>
+                            </CardTitle>
+                            <CardDescription>Manage the businesses supported by the BUG Launchpad.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-8">
+                            {(localContent['business_categories_items'] || []).map((cat, catIdx) => (
+                                <div key={catIdx} className="p-6 bg-gray-50 rounded-3xl border border-gray-100 space-y-4 relative group">
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="absolute top-4 right-4 text-red-500 hover:bg-red-50"
+                                        onClick={() => removeItem('business_categories_items', catIdx)}
+                                    >
+                                        <Trash2 size={18} />
+                                    </Button>
+
+                                    <div className="max-w-md">
+                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 block">Category Title</label>
+                                        <Input
+                                            value={cat.title}
+                                            onChange={(e) => updateItem('business_categories_items', catIdx, 'title', e.target.value)}
+                                            className="font-bold text-xl bg-white h-12"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-3 pl-4 border-l-2 border-gray-200 mt-6">
+                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Sub-Items / Services</label>
+                                        {(cat.items || []).map((item, itemIdx) => (
+                                            <div key={itemIdx} className="flex gap-2">
+                                                <Input
+                                                    value={item}
+                                                    onChange={(e) => {
+                                                        const newItems = [...cat.items];
+                                                        newItems[itemIdx] = e.target.value;
+                                                        updateItem('business_categories_items', catIdx, 'items', newItems);
+                                                    }}
+                                                    className="bg-white"
+                                                />
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="text-gray-400 hover:text-red-500 shrink-0"
+                                                    onClick={() => {
+                                                        const newItems = cat.items.filter((_, i) => i !== itemIdx);
+                                                        updateItem('business_categories_items', catIdx, 'items', newItems);
+                                                    }}
+                                                >
+                                                    <Trash2 size={16} />
+                                                </Button>
+                                            </div>
+                                        ))}
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => {
+                                                const newItems = [...(cat.items || []), ""];
+                                                updateItem('business_categories_items', catIdx, 'items', newItems);
+                                            }}
+                                            className="mt-2 text-xs font-bold border-dashed rounded-lg"
+                                        >
+                                            + Add Item
+                                        </Button>
+                                    </div>
+                                </div>
+                            ))}
                         </CardContent>
                     </Card>
                 </TabsContent>

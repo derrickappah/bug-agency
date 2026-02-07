@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./components/ui/accordion";
 import { Input } from "./components/ui/input";
 import { Badge } from "./components/ui/badge";
-import { Check, Truck, TrendingUp, Users, Download, Lock, Smartphone, Star, ArrowRight, Map, Navigation, Radar, ShieldCheck, Zap, Activity, Sparkles, PlayCircle, Flag, Layers, Gift, HelpCircle, Globe, Loader2, Package as PackageIcon } from "lucide-react";
+import { Check, Truck, TrendingUp, Users, Download, Lock, Smartphone, Star, ArrowRight, Map, Navigation, Radar, ShieldCheck, Zap, Activity, Sparkles, PlayCircle, Flag, Layers, Gift, HelpCircle, Globe, Loader2, Package as PackageIcon, Video, PenTool, Home, GraduationCap, Calendar, Cross, Trophy } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./components/ui/carousel";
 import { toast } from "sonner";
 import { PurchaseDialog } from "./components/PurchaseDialog";
@@ -13,6 +13,7 @@ import { BusinessCategoriesDialog } from "./components/BusinessCategoriesDialog"
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "./components/ui/sheet";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./components/ui/select";
 import { supabase } from './lib/supabaseClient';
 import { useNavigate } from 'react-router-dom';
 // import { usePaystackPayment } from 'react-paystack'; // Switched to Native for reliability
@@ -29,7 +30,7 @@ const TransformHeadline = ({ content }) => {
                 transition={{ duration: 0.8, delay: 0.2 }}
                 className="relative inline-block"
             >
-                <span className="text-lg sm:text-2xl md:text-3xl font-medium text-gray-400 italic tracking-wider">
+                <span className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-medium text-gray-400 italic tracking-wider">
                     {content?.hero_small_text || 'Stop Posting for "Likes".'}
                 </span>
                 <motion.div
@@ -85,6 +86,9 @@ const LandingPage = () => {
     const [tempPaymentData, setTempPaymentData] = useState(null);
     const [preFlightOrderId, setPreFlightOrderId] = useState(null);
     const [isCreatingOrder, setIsCreatingOrder] = useState(false);
+    const [businessName, setBusinessName] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [showEligibility, setShowEligibility] = useState(false);
     const [categories, setCategories] = useState([]);
     const [loadingCategories, setLoadingCategories] = useState(true);
 
@@ -163,6 +167,8 @@ const LandingPage = () => {
         };
         fetchData();
     }, []);
+
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     // Auto-swipe for testimonials
     useEffect(() => {
@@ -345,6 +351,59 @@ const LandingPage = () => {
         }
     };
 
+    const DEFAULT_BUSINESS_CATEGORIES = [
+        {
+            title: "ONLINE BUSINESS",
+            items: ["Hair", "Logistics & Transport", "Clothing", "Food & Drinks", "Phones & Accessories", "Perfumes"]
+        },
+        {
+            title: "HOW TO GO VIRAL",
+            items: ["How to post for more likes", "When to post", "Things to post"]
+        },
+        {
+            title: "CONTENT CREATION",
+            items: ["Male types of contents", "Female types of contents", "Animal contents", "How to manage and monetize your accounts"]
+        },
+        {
+            title: "BLOGGING",
+            items: ["How to be a blogger", "How to earn from blogging", "How to post as a blogger"]
+        },
+        {
+            title: "REAL ESTATE",
+            items: ["How to buy and sell properties online", "How to make videos for housing contents", "Property management tips and social media engagements"]
+        },
+        {
+            title: "EDUCATION",
+            items: ["How to manage social engagements"]
+        },
+        {
+            title: "EVENT PLANNING",
+            items: ["General Event Planning Services"]
+        },
+        {
+            title: "CHURCH & RELIGION",
+            items: ["How to go live", "How to grow church pages", "How to advertise for upcoming church events"]
+        },
+        {
+            title: "SPORTS",
+            items: ["General Sports Management & Content"]
+        }
+    ];
+
+    const getCategoryIcon = (title) => {
+        const t = title.toUpperCase();
+        if (t.includes("ONLINE")) return <Globe className="w-8 h-8 text-[var(--accent-text)]" />;
+        if (t.includes("VIRAL")) return <Zap className="w-8 h-8 text-[var(--accent-text)]" />;
+        if (t.includes("CONTENT")) return <Video className="w-8 h-8 text-[var(--accent-text)]" />;
+        if (t.includes("BLOGGING")) return <PenTool className="w-8 h-8 text-[var(--accent-text)]" />;
+        if (t.includes("ESTATE")) return <Home className="w-8 h-8 text-[var(--accent-text)]" />;
+        if (t.includes("EDUCATION")) return <GraduationCap className="w-8 h-8 text-[var(--accent-text)]" />;
+        if (t.includes("EVENT")) return <Calendar className="w-8 h-8 text-[var(--accent-text)]" />;
+        if (t.includes("CHURCH") || t.includes("RELIGION")) return <Cross className="w-8 h-8 text-[var(--accent-text)]" />;
+        if (t.includes("SPORTS")) return <Trophy className="w-8 h-8 text-[var(--accent-text)]" />;
+        return <Layers className="w-8 h-8 text-[var(--accent-text)]" />;
+    };
+
     return (
         <div className="min-h-screen bg-[var(--bg-page)] text-[var(--text-primary)] font-sans overflow-x-hidden">
 
@@ -367,9 +426,9 @@ const LandingPage = () => {
                 {/* Desktop Nav Links */}
                 <div className="hidden lg:flex gap-4 items-center">
                     {[
-                        { label: 'Modules', href: '#features' },
                         { label: 'Pricing', href: '#pricing' },
-                        { label: 'About', href: '#about' }
+                        { label: 'About', href: '#about' },
+                        { label: 'FAQ', href: '#faq' }
                     ].map((link) => (
                         <a
                             key={link.label}
@@ -396,7 +455,7 @@ const LandingPage = () => {
                     </motion.button>
 
                     {/* Mobile Menu */}
-                    <Sheet>
+                    <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
                         <SheetTrigger asChild>
                             <Button variant="ghost" size="icon" className="lg:hidden rounded-full hover:bg-[var(--accent-wash)]">
                                 <Menu className="w-5 h-5" />
@@ -415,13 +474,14 @@ const LandingPage = () => {
                             {/* Navigation Links */}
                             <nav className="flex flex-col gap-1 mt-8">
                                 {[
-                                    { label: 'Modules', href: '#features' },
                                     { label: 'Pricing', href: '#pricing' },
-                                    { label: 'About', href: '#about' }
+                                    { label: 'About', href: '#about' },
+                                    { label: 'FAQ', href: '#faq' }
                                 ].map((link, idx) => (
                                     <a
                                         key={link.label}
                                         href={link.href}
+                                        onClick={() => setIsMenuOpen(false)}
                                         className="group relative text-2xl font-bold text-[var(--text-primary)] hover:text-[var(--accent-text)] transition-colors py-4 px-2"
                                     >
                                         <span className="relative z-10">{link.label}</span>
@@ -433,7 +493,10 @@ const LandingPage = () => {
                             {/* CTA Button */}
                             <div className="absolute bottom-8 left-6 right-6">
                                 <button
-                                    onClick={() => document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' })}
+                                    onClick={() => {
+                                        setIsMenuOpen(false);
+                                        document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' });
+                                    }}
                                     className="w-full rounded-full bg-[var(--text-primary)] text-white hover:bg-[var(--text-primary)]/90 py-4 text-base font-bold transition-all duration-300 shadow-lg hover:shadow-xl"
                                 >
                                     Get Started
@@ -487,7 +550,7 @@ const LandingPage = () => {
                             <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 blur-xl bg-[var(--accent-primary)]/50 -z-10 transition-opacity duration-300" />
 
                             <span className="relative z-10 flex items-center justify-center gap-2 group-hover:text-[var(--text-primary)] transition-colors duration-300">
-                                {siteContent.hero_cta_text || "Get The Launchpad"}
+                                {siteContent.hero_cta_text || "Get Started"}
                                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
                             </span>
                         </motion.button>
@@ -576,182 +639,6 @@ const LandingPage = () => {
                 </div>
             </section>
 
-            {/* The Analogy - GPS Redesign */}
-            {/* Strategic Framework Section */}
-            <section className="py-24 px-4 md:px-6 bg-[var(--text-primary)] text-white relative overflow-hidden">
-                <div className="absolute inset-0 opacity-10 pointer-events-none">
-                    <div className="absolute top-0 left-0 w-full h-full" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)', backgroundSize: '30px 30px' }}></div>
-                </div>
-                <motion.div
-                    animate={{ scale: [1, 1.1, 1], opacity: [0.05, 0.1, 0.05] }}
-                    transition={{ duration: 10, repeat: Infinity }}
-                    className="absolute -top-24 -right-24 w-[500px] h-[500px] bg-[var(--accent-primary)] rounded-full blur-[140px] pointer-events-none"
-                ></motion.div>
-
-                <div className="max-w-6xl mx-auto relative z-10">
-                    <div className="grid lg:grid-cols-2 gap-16 items-center">
-                        <motion.div
-                            initial={{ opacity: 0, x: -50 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true, amount: 0.3 }}
-                            transition={{ duration: 0.8 }}
-                        >
-                            <Badge className="bg-white/10 text-[var(--accent-primary)] border-white/20 mb-6 backdrop-blur-md px-5 py-2 ring-1 ring-white/10 shadow-lg">
-                                <motion.div animate={{ rotate: 360 }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }} className="mr-2">
-                                    <Radar className="w-4 h-4" />
-                                </motion.div>
-                                Strategic Framework
-                            </Badge>
-                            <h2 className="text-4xl sm:text-5xl md:text-7xl font-black leading-[0.9] mb-8 tracking-tighter">
-                                {siteContent.strat_title ? (
-                                    <span dangerouslySetInnerHTML={{ __html: siteContent.strat_title.replace('GPS.', '<span class="text-[var(--accent-primary)] bg-clip-text text-transparent bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-strong)]">GPS.</span>') }}></span>
-                                ) : (
-                                    <>Stop following maps. <br /> <span className="text-[var(--accent-primary)] bg-clip-text text-transparent bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-strong)]">Start using GPS.</span></>
-                                )}
-                            </h2>
-                            <p className="text-lg md:text-xl text-gray-400 mb-10 leading-relaxed max-w-xl font-medium">
-                                {siteContent.strat_desc || "A static map leaves you stuck in traffic. BUG Agency is your Live GPS. We provide real-time redirection, bypass the \"Ghosting\" jams, and calculate the fastest route to your next GH¢ 10k."}
-                            </p>
-
-                            <div className="grid sm:grid-cols-2 gap-6 mt-12">
-                                {[
-                                    { icon: <Navigation className="w-6 h-6" />, title: "Live Guidance", desc: "Step-by-step scripts for every inquiry.", delay: 0.2, color: "bg-[var(--accent-wash)] text-[var(--accent-text)]" },
-                                    { icon: <ShieldCheck className="w-6 h-6" />, title: "Traffic Bypass", desc: "Proven MoMo protocols for payments.", delay: 0.4, color: "bg-orange-500/10 text-orange-400" }
-                                ].map((benefit, idx) => (
-                                    <motion.div
-                                        key={idx}
-                                        initial={{ opacity: 0, y: 20 }}
-                                        whileInView={{ opacity: 1, y: 0 }}
-                                        viewport={{ once: true }}
-                                        transition={{ duration: 0.5, delay: benefit.delay }}
-                                        className="flex items-start gap-4 p-5 rounded-[2rem] bg-white/5 border border-white/10 backdrop-blur-sm group hover:border-[var(--accent-primary)]/50 transition-colors"
-                                    >
-                                        <div className={`${benefit.color} p-4 rounded-2xl group-hover:scale-110 transition-transform shadow-lg`}>
-                                            {benefit.icon}
-                                        </div>
-                                        <div>
-                                            <h4 className="font-bold text-lg mb-1">{benefit.title}</h4>
-                                            <p className="text-sm text-gray-400 leading-snug">{benefit.desc}</p>
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </div>
-                        </motion.div>
-
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 1, type: "spring" }}
-                            className="relative"
-                        >
-                            {/* Premium Cyber-Dashboard */}
-                            <div className="bg-[#0f1115]/80 backdrop-blur-2xl rounded-[3rem] border border-white/10 shadow-[-20px_20px_60px_rgba(0,0,0,0.5)] p-8 sm:p-10 relative overflow-hidden group">
-                                {/* Moving Scan Line */}
-                                <motion.div
-                                    animate={{ top: ['0%', '100%', '0%'] }}
-                                    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                                    className="absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[var(--accent-primary)]/30 to-transparent pointer-events-none z-20"
-                                />
-
-                                <div className="flex justify-between items-start mb-12">
-                                    <div className="flex flex-col gap-1">
-                                        <div className="flex gap-2 mb-2">
-                                            <div className="w-3 h-3 rounded-full bg-red-500/80 shadow-[0_0_8px_rgba(239,68,68,0.5)]"></div>
-                                            <div className="w-3 h-3 rounded-full bg-yellow-500/80 shadow-[0_0_8px_rgba(234,179,8,0.5)]"></div>
-                                            <div className="w-3 h-3 rounded-full bg-green-500/80 shadow-[0_0_8px_rgba(34,197,94,0.5)]"></div>
-                                        </div>
-                                        <div className="text-[10px] font-black font-mono text-gray-500 uppercase tracking-widest bg-white/5 px-2 py-1 rounded">Scale Core v4.0</div>
-                                    </div>
-                                    <div className="text-right">
-                                        <div className="flex items-center gap-2 text-[10px] font-mono text-[var(--accent-primary)] uppercase tracking-tighter">
-                                            <span className="w-2 h-2 bg-[var(--accent-primary)] rounded-full animate-pulse shadow-[0_0_8px_var(--accent-primary)]"></span>
-                                            Satellite Link: Active
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="space-y-10">
-                                    {/* Old Strategy Comparison */}
-                                    <div className="relative">
-                                        <div className="flex justify-between text-[11px] mb-3 font-black uppercase tracking-widest text-gray-500">
-                                            <span>Old Strategy</span>
-                                            <span className="text-red-400">Inefficient / High Drop-off</span>
-                                        </div>
-                                        <div className="h-4 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
-                                            <motion.div
-                                                initial={{ width: 0 }}
-                                                whileInView={{ width: '33%' }}
-                                                transition={{ duration: 1.5, delay: 0.5 }}
-                                                className="h-full bg-gradient-to-r from-red-500/40 to-red-500/60"
-                                            ></motion.div>
-                                        </div>
-                                        <p className="text-[12px] text-gray-400 mt-4 italic font-medium">"Hoping for viral luck" — 70% customer ghosting rate.</p>
-                                    </div>
-
-                                    {/* BUG Launchpad Comparison */}
-                                    <div className="relative">
-                                        <div className="flex justify-between text-[11px] mb-3 font-black uppercase tracking-widest text-[var(--accent-primary)]">
-                                            <span>The Launchpad GPS</span>
-                                            <span className="animate-pulse shadow-sm">Real-time Optimization</span>
-                                        </div>
-                                        <div className="h-4 w-full bg-white/5 rounded-full overflow-hidden border border-white/10 ring-2 ring-[var(--accent-primary)]/20 shadow-lg">
-                                            <motion.div
-                                                initial={{ width: 0 }}
-                                                whileInView={{ width: '94%' }}
-                                                transition={{ duration: 1.5, delay: 0.8 }}
-                                                className="h-full bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-strong)] relative"
-                                            >
-                                                <motion.div
-                                                    animate={{ x: ['-100%', '100%'] }}
-                                                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                                                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
-                                                />
-                                            </motion.div>
-                                        </div>
-                                        <div className="grid grid-cols-2 gap-4 mt-5">
-                                            <div className="flex items-center gap-2 text-[11px] font-black text-white bg-white/5 px-3 py-2 rounded-xl border border-white/5">
-                                                <Zap className="w-3.5 h-3.5 text-[var(--accent-primary)]" fill="currentColor" /> 5-Post Logic
-                                            </div>
-                                            <div className="flex items-center gap-2 text-[11px] font-black text-white bg-white/5 px-3 py-2 rounded-xl border border-white/5">
-                                                <Users className="w-3.5 h-3.5 text-[var(--accent-primary)]" fill="currentColor" /> Ghost-Proof
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Dynamic Navigation Box */}
-                                <motion.div
-                                    whileHover={{ y: -5, scale: 1.02 }}
-                                    className="mt-14 p-8 rounded-[2rem] bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-strong)] text-[var(--text-primary)] shadow-[0_15px_40px_rgba(0,0,0,0.3)] relative overflow-hidden"
-                                >
-                                    <div className="absolute top-0 right-0 p-4 opacity-10">
-                                        <Radar size={80} strokeWidth={1} />
-                                    </div>
-                                    <div className="flex items-center justify-between relative z-10">
-                                        <div>
-                                            <div className="text-[11px] uppercase font-black tracking-widest opacity-70 mb-1">Route Recalculation</div>
-                                            <div className="text-3xl font-black tracking-tighter leading-none">Next Sale: 12m</div>
-                                        </div>
-                                        <motion.div
-                                            animate={{ rotate: 45, x: [0, 5, 0], y: [0, -5, 0] }}
-                                            transition={{ duration: 2, repeat: Infinity }}
-                                            className="w-16 h-16 bg-black/10 rounded-full flex items-center justify-center shadow-inner"
-                                        >
-                                            <Navigation className="w-8 h-8" fill="currentColor" />
-                                        </motion.div>
-                                    </div>
-                                </motion.div>
-                            </div>
-
-                            {/* Outer Glow Effects */}
-                            <div className="absolute -z-10 -inset-10 bg-[var(--accent-primary)]/10 blur-[100px] opacity-50 group-hover:opacity-100 transition-opacity"></div>
-                            <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-[var(--accent-strong)]/20 rounded-full blur-[60px] animate-pulse"></div>
-                        </motion.div>
-                    </div>
-                </div>
-            </section>
-
             {/* Results Section - Bento Redesign */}
             <section className="py-24 px-4 md:px-6 bg-white overflow-hidden">
                 <div className="max-w-6xl mx-auto">
@@ -763,7 +650,7 @@ const LandingPage = () => {
                         className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8"
                     >
                         <div className="max-w-2xl">
-                            <Badge className="bg-[var(--accent-wash)] text-[var(--accent-text)] border-[var(--accent-strong)] mb-4 px-4 py-1.5 ring-1 ring-[var(--accent-strong)]/20 shadow-sm transition-all hover:shadow-md">
+                            <Badge className="bg-[var(--accent-wash)] text-[var(--accent-text)] border-[var(--accent-strong)] mb-4 px-4 py-1.5 ring-1 ring-[var(--accent-strong)]/20 shadow-sm hover:shadow-md">
                                 <Activity className="w-3.5 h-3.5 mr-2" />
                                 Performance Metrics
                             </Badge>
@@ -872,7 +759,7 @@ const LandingPage = () => {
                                 className="group/btn relative w-full md:w-auto rounded-full bg-[var(--text-primary)] text-white px-10 h-16 flex items-center justify-center font-black transition-all shadow-xl hover:shadow-[var(--accent-primary)]/40 overflow-hidden"
                             >
                                 <span className="relative z-10 flex items-center gap-3">
-                                    Get Your Blueprint
+                                    Get Started
                                     <ArrowRight className="w-6 h-6 group-hover/btn:translate-x-2 transition-transform" />
                                 </span>
                                 <div className="absolute inset-0 bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-strong)] opacity-0 group-hover/btn:opacity-100 transition-opacity"></div>
@@ -883,76 +770,6 @@ const LandingPage = () => {
                 </div>
             </section>
 
-            {/* Modules/Accordion - Blueprint Roadmap Redesign */}
-            <section className="py-24 px-4 md:px-6 bg-[var(--bg-page)] relative overflow-hidden" id="features">
-                <div className="max-w-4xl mx-auto relative">
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8 }}
-                        className="text-center mb-20"
-                    >
-                        <Badge className="bg-[var(--accent-wash)] text-[var(--accent-text)] border-[var(--accent-strong)] mb-4 px-4 py-1.5 shadow-sm">
-                            <Layers className="w-4 h-4 mr-2" />
-                            Curriculum Roadmap
-                        </Badge>
-                        <h2 className="text-4xl md:text-5xl font-black text-[var(--text-primary)] mb-6 tracking-tight">
-                            {siteContent.blueprint_title ? (
-                                <span dangerouslySetInnerHTML={{ __html: siteContent.blueprint_title.replace('Blueprint', '<span class="bg-clip-text text-transparent bg-gradient-to-r from-[var(--text-primary)] to-[var(--accent-strong)]">Blueprint</span>') }}></span>
-                            ) : (
-                                <>Inside The <span className="bg-clip-text text-transparent bg-gradient-to-r from-[var(--text-primary)] to-[var(--accent-strong)]">Blueprint</span></>
-                            )}
-                        </h2>
-                        <p className="text-lg md:text-xl text-[var(--text-secondary)] font-medium">{siteContent.blueprint_subtitle || "5 Pillars of Ghanaian Business Success"}</p>
-                    </motion.div>
-
-                    <div className="relative">
-                        {/* Vertical Roadmap Line */}
-                        <div className="absolute left-[21px] top-6 bottom-6 w-[2px] bg-gradient-to-b from-[var(--accent-strong)] via-[var(--accent-wash)] to-transparent hidden sm:block opacity-30"></div>
-
-                        <Accordion type="single" collapsible className="w-full space-y-6">
-                            {(siteContent.blueprint_items && siteContent.blueprint_items.length > 0 ? siteContent.blueprint_items : [
-                                { step: "01", title: "Professionalism on a Budget", content: "Transitioning to WhatsApp Business, setting up catalogs properly, and maintaining consistent brand colors without spending millions." },
-                                { step: "02", title: "The WhatsApp Sales Machine", content: "Implementing the '5-Post Rule' for status updates: Hook, Solution, Proof, Behind the Scenes, and Call to Action." },
-                                { step: "03", title: "Saveable Content Strategies", content: "Focus on educational content and short-form video (15-second Reels/TikToks) using free tools like CapCut." },
-                                { step: "04", title: "Logistics & Payment Mastery", content: "Managing riders, professional low-cost packaging (brown bags + stamps), and MoMo verification protocols." },
-                                { step: "05", title: "7-Day Growth Challenge", content: "A step-by-step daily task list including status swaps, flash sales, and profit reinvestment." }
-                            ]).map((mod, idx) => (
-                                <motion.div
-                                    key={idx}
-                                    initial={{ opacity: 0, x: -20 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ duration: 0.5, delay: idx * 0.1 }}
-                                >
-                                    <AccordionItem
-                                        value={`m-${idx}`}
-                                        className="border border-[var(--border-light)] rounded-[2rem] px-6 bg-white shadow-sm data-[state=open]:shadow-xl data-[state=open]:border-[var(--accent-strong)] transition-all duration-300 group overflow-hidden"
-                                    >
-                                        <AccordionTrigger className="hover:no-underline py-6 text-left group-data-[state=open]:pb-4">
-                                            <div className="flex items-center gap-5 w-full">
-                                                <div className="flex-shrink-0 w-11 h-11 rounded-2xl bg-[var(--bg-section)] border border-[var(--border-light)] flex items-center justify-center text-[var(--accent-text)] group-data-[state=open]:bg-[var(--accent-primary)] group-data-[state=open]:text-[var(--text-primary)] group-data-[state=open]:border-[var(--accent-strong)] transition-all duration-500 shadow-sm">
-                                                    {idx === 0 ? <Layers className="w-5 h-5" /> : idx === 1 ? <Smartphone className="w-5 h-5" /> : idx === 2 ? <PlayCircle className="w-5 h-5" /> : idx === 3 ? <Truck className="w-5 h-5" /> : <Flag className="w-5 h-5" />}
-                                                </div>
-                                                <div className="flex flex-col">
-                                                    <span className="text-[10px] font-black uppercase tracking-widest text-[var(--accent-text)] mb-0.5 opacity-60 group-data-[state=open]:opacity-100 transition-opacity">Module {mod.step || `0${idx + 1}`}</span>
-                                                    <span className="text-lg md:text-xl font-bold text-[var(--text-primary)] tracking-tight">{mod.title}</span>
-                                                </div>
-                                            </div>
-                                        </AccordionTrigger>
-                                        <AccordionContent className="text-[var(--text-secondary)] pb-8 pt-2 pl-16 text-base md:text-lg leading-relaxed font-medium transition-all">
-                                            <div className="max-w-2xl border-l-2 border-[var(--accent-wash)] pl-6 py-1">
-                                                {mod.content}
-                                            </div>
-                                        </AccordionContent>
-                                    </AccordionItem>
-                                </motion.div>
-                            ))}
-                        </Accordion>
-                    </div>
-                </div>
-            </section>
 
             {/* Testimonials Section */}
             <section className="py-24 px-4 md:px-6 bg-white overflow-hidden">
@@ -1017,14 +834,180 @@ const LandingPage = () => {
                 </div>
             </section >
 
-            {/* Pricing Section */}
-            < section className="py-24 px-4 md:px-6 bg-[var(--bg-section)]" id="pricing" >
-                <div className="max-w-6xl mx-auto">
+            {/* Freebie Lead Magnet */}
+            < section className="py-20 px-4 bg-white border-t border-[var(--border-light)]" >
+                <div className="max-w-3xl mx-auto text-center">
+                    <div className="bg-[var(--bg-section)] rounded-3xl p-8 md:p-12 border border-[var(--border-light)]">
+                        <h3 className="heading-3 mb-4">Not ready to buy yet?</h3>
+                        <p className="body-medium mb-8 text-[var(--text-secondary)]">
+                            Get our <span className="font-bold text-[var(--text-primary)]">Essential Business Checklist for free</span>.
+                            Start organizing your business today.
+                        </p>
+                        <form onSubmit={handleLeadSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                            <Input
+                                type="email"
+                                placeholder="Enter your email address"
+                                className="bg-white border-gray-200 h-12 rounded-full px-6"
+                                required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                            <Button type="submit" className="rounded-full bg-[var(--text-primary)] h-12 px-8" disabled={isSubmitting}>
+                                {isSubmitting ? "Sending..." : "Send it to me"}
+                            </Button>
+                        </form>
+                        <p className="text-xs text-[var(--text-muted)] mt-4">No spam. Unsubscribe anytime.</p>
+                    </div>
+                </div>
+            </section >
+
+            {/* Eligible Business Section */}
+            <section className="py-24 px-4 bg-white border-t border-[var(--border-light)] overflow-hidden" id="eligible">
+                <div className="max-w-4xl mx-auto">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8 }}
+                        className="text-center mb-16"
+                    >
+                        <Badge className="bg-[var(--accent-wash)] text-[var(--accent-text)] border-[var(--accent-strong)] mb-4 px-4 py-1.5 shadow-sm">
+                            <Check className="w-4 h-4 mr-2" />
+                            Eligibility Tool
+                        </Badge>
+                        <h2 className="text-4xl md:text-6xl font-black text-[var(--text-primary)] mb-6 tracking-tight">
+                            Is Your Business <span className="bg-clip-text text-transparent bg-gradient-to-r from-[var(--text-primary)] to-[var(--accent-strong)]">Eligible?</span>
+                        </h2>
+                        <p className="text-lg md:text-xl text-[var(--text-secondary)] font-medium max-w-2xl mx-auto">
+                            Fill out the form below to see if the BUG Launchpad is the right fit for your industry.
+                        </p>
+                    </motion.div>
+
+                    <div className="relative">
+                        <Card className="border-[var(--border-light)] shadow-2xl rounded-[3rem] overflow-hidden bg-[var(--bg-page)] max-w-2xl mx-auto">
+                            <CardContent className="p-8 md:p-12">
+                                <AnimatePresence mode="wait">
+                                    {!showEligibility ? (
+                                        <motion.div
+                                            key="form"
+                                            initial={{ opacity: 0, x: -20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, x: 20 }}
+                                            className="space-y-8"
+                                        >
+                                            <div className="space-y-4">
+                                                <label className="text-sm font-black text-[var(--text-primary)] uppercase tracking-widest pl-1">Business Name</label>
+                                                <Input
+                                                    placeholder="e.g. Serwaa's Skin Care"
+                                                    className="h-14 rounded-2xl border-gray-200 bg-white px-6 text-lg font-medium focus:ring-2 focus:ring-[var(--accent-primary)] transition-all"
+                                                    value={businessName}
+                                                    onChange={(e) => setBusinessName(e.target.value)}
+                                                />
+                                            </div>
+
+                                            <div className="space-y-4">
+                                                <label className="text-sm font-black text-[var(--text-primary)] uppercase tracking-widest pl-1">Industry / Category</label>
+                                                <Select onValueChange={(val) => {
+                                                    const cat = (siteContent.business_categories_items || DEFAULT_BUSINESS_CATEGORIES).find(c => c.title === val);
+                                                    setSelectedCategory(cat);
+                                                }}>
+                                                    <SelectTrigger className="h-14 rounded-2xl border-gray-200 bg-white px-6 text-lg font-medium shadow-none">
+                                                        <SelectValue placeholder="Select your industry" />
+                                                    </SelectTrigger>
+                                                    <SelectContent className="bg-white rounded-2xl border-gray-200 shadow-xl">
+                                                        {(siteContent.business_categories_items || DEFAULT_BUSINESS_CATEGORIES).map((cat, idx) => (
+                                                            <SelectItem key={idx} value={cat.title} className="py-3 rounded-xl focus:bg-[var(--accent-wash)]">
+                                                                {cat.title}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+
+                                            <Button
+                                                onClick={() => {
+                                                    if (!selectedCategory) {
+                                                        toast.error("Please select an industry first.");
+                                                        return;
+                                                    }
+                                                    setShowEligibility(true);
+                                                }}
+                                                className="w-full h-16 rounded-2xl bg-[var(--text-primary)] text-white text-lg font-black uppercase tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-black/10 group"
+                                            >
+                                                Check My Eligibility
+                                                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                            </Button>
+                                        </motion.div>
+                                    ) : (
+                                        <motion.div
+                                            key="result"
+                                            initial={{ opacity: 0, scale: 0.9 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            exit={{ opacity: 0, scale: 0.9 }}
+                                            className="text-center space-y-8"
+                                        >
+                                            <div className="flex flex-col items-center">
+                                                <div className="w-24 h-24 rounded-3xl bg-[var(--accent-wash)] flex items-center justify-center mb-6 text-[var(--accent-strong)]">
+                                                    {getCategoryIcon(selectedCategory.title)}
+                                                </div>
+                                                <h3 className="text-3xl md:text-4xl font-black text-[var(--text-primary)] mb-2 uppercase tracking-tight">
+                                                    {businessName || "Your Business"} is <span className="text-green-500 italic">Eligible!</span>
+                                                </h3>
+                                                <Badge className="bg-green-100 text-green-700 border-green-200 mb-6 font-bold">Confirmed Compatibility</Badge>
+                                            </div>
+
+                                            <div className="bg-white rounded-[2rem] p-8 border border-gray-100 text-left space-y-4 shadow-sm">
+                                                <p className="text-sm font-black text-[var(--text-primary)] uppercase tracking-widest mb-4">What we cover for {selectedCategory.title}:</p>
+                                                <div className="grid sm:grid-cols-2 gap-3">
+                                                    {selectedCategory.items.map((item, i) => (
+                                                        <div key={i} className="flex items-center gap-3 text-sm font-bold text-[var(--text-secondary)]">
+                                                            <div className="w-2 h-2 rounded-full bg-green-500" />
+                                                            {item}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                                                <Button
+                                                    onClick={() => document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' })}
+                                                    className="flex-1 h-14 rounded-2xl bg-[var(--accent-primary)] text-[var(--text-primary)] font-black uppercase tracking-widest hover:scale-[1.02] transition-all shadow-lg shadow-[var(--accent-primary)]/20"
+                                                >
+                                                    Get Your Launchpad
+                                                </Button>
+                                                <Button
+                                                    variant="ghost"
+                                                    onClick={() => setShowEligibility(false)}
+                                                    className="h-14 rounded-2xl text-[var(--text-secondary)] font-bold"
+                                                >
+                                                    Try Another Business
+                                                </Button>
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </CardContent>
+                        </Card>
+
+                        {/* Decorative side elements */}
+                        <div className="absolute top-1/2 -left-32 -translate-y-1/2 w-64 h-64 bg-[var(--accent-primary)]/10 rounded-full blur-3xl -z-10" />
+                        <div className="absolute top-1/2 -right-32 -translate-y-1/2 w-64 h-64 bg-[var(--accent-strong)]/10 rounded-full blur-3xl -z-10" />
+                    </div>
+                </div>
+            </section>
+
+            {/* Pricing Section - Redesign */}
+            < section className="py-24 px-4 bg-[var(--bg-page)] relative overflow-hidden" id="pricing" >
+                <div className="absolute inset-0 opacity-5 pointer-events-none">
+                    <div className="absolute top-0 right-0 w-96 h-96 bg-[var(--accent-primary)] rounded-full blur-[120px]"></div>
+                </div>
+
+                <div className="max-w-3xl mx-auto relative z-10">
                     <div className="text-center mb-16">
                         <h2 className="heading-2 mb-4">Choose Your Launchpad</h2>
                         <div className="flex flex-col items-center gap-2">
                             <p className="body-medium text-[var(--text-secondary)]">Investment tiers designed for every stage of business.</p>
-                            <BusinessCategoriesDialog />
+                            <BusinessCategoriesDialog categories={siteContent.business_categories_items} />
                         </div>
                     </div>
 
@@ -1111,33 +1094,6 @@ const LandingPage = () => {
                 </div>
             </section >
 
-            {/* Freebie Lead Magnet */}
-            < section className="py-20 px-4 bg-white border-t border-[var(--border-light)]" >
-                <div className="max-w-3xl mx-auto text-center">
-                    <div className="bg-[var(--bg-section)] rounded-3xl p-8 md:p-12 border border-[var(--border-light)]">
-                        <h3 className="heading-3 mb-4">Not ready to buy yet?</h3>
-                        <p className="body-medium mb-8 text-[var(--text-secondary)]">
-                            Get our <span className="font-bold text-[var(--text-primary)]">Essential Business Checklist for free</span>.
-                            Start organizing your business today.
-                        </p>
-                        <form onSubmit={handleLeadSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-                            <Input
-                                type="email"
-                                placeholder="Enter your email address"
-                                className="bg-white border-gray-200 h-12 rounded-full px-6"
-                                required
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                            <Button type="submit" className="rounded-full bg-[var(--text-primary)] h-12 px-8" disabled={isSubmitting}>
-                                {isSubmitting ? "Sending..." : "Send it to me"}
-                            </Button>
-                        </form>
-                        <p className="text-xs text-[var(--text-muted)] mt-4">No spam. Unsubscribe anytime.</p>
-                    </div>
-                </div>
-            </section >
-
             {/* FAQ Section - Redesign */}
             <section className="py-24 px-4 bg-[var(--bg-page)] relative overflow-hidden" id="faq">
                 <div className="absolute inset-0 opacity-5 pointer-events-none">
@@ -1207,7 +1163,7 @@ const LandingPage = () => {
                         <div className="relative">
                             <div className="absolute -top-4 -left-4 w-24 h-24 bg-[var(--accent-primary)] rounded-full -z-10 opacity-50 blur-2xl"></div>
                             <img
-                                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2"
+                                src="/our-story.jpg"
                                 alt="BUG Agency Team"
                                 className="rounded-3xl shadow-2xl border border-[var(--border-light)]"
                             />
@@ -1267,9 +1223,9 @@ const LandingPage = () => {
                     <div>
                         <h4 className="font-bold mb-6 text-white uppercase tracking-wider text-xs md:text-sm">Quick Links</h4>
                         <ul className="space-y-4 text-gray-400 text-sm">
-                            <li><a href="#features" className="hover:text-white transition-colors">The Launchpad</a></li>
                             <li><a href="#pricing" className="hover:text-white transition-colors">Pricing Tiers</a></li>
                             <li><a href="#about" className="hover:text-white transition-colors">Our Story</a></li>
+                            <li><a href="#faq" className="hover:text-white transition-colors">FAQ</a></li>
                             <li><a href="#" className="hover:text-white transition-colors">Success Stories</a></li>
                         </ul>
                     </div>
